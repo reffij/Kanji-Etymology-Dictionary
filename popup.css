@@ -1,0 +1,488 @@
+:root {
+  /* spacing scale */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+
+  /* border radius */
+  --round-md: 0.5rem;
+  --round-full: 999px;
+
+  /* colors */
+  --color1: rgb(239,239,239);
+  --color2: rgb(170,170,170);
+  --color3: rgb(136,136,136);
+  --color4: rgb(68,68,68);
+  --color5: rgb(51,51,51);
+  --color6: rgb(34,34,34);
+  --bkg: rgb(24,24,24);
+  --exitColor: rgb(174,37,56);
+
+  --ease-elastic: cubic-bezier(.68, -0.55, .27, 1.55);
+}
+
+/* Base */
+body {
+  background-color: var(--bkg);
+  color: var(--color1);
+  font-size: small;
+  min-width: 600px;
+  margin: 0px;
+}
+
+header {
+  display: flex;
+  margin: 8px;
+}
+
+footer {
+  margin: 8px;
+  text-align: center;
+}
+
+#tab-bar {
+  display: flex;
+  gap: 3px;
+}
+
+#header-button-container {
+  display: flex;
+  gap: 3px;
+}
+
+#logo-container {
+  margin-left: 60%;
+}
+
+#tab-label-container {
+  display: flex;
+  margin-left: 8px;
+}
+
+.tab-label {
+  display: flex;
+}
+
+#seperator {
+  background-color: var(--color5);
+  height: 3px;
+  width: 100%;
+}
+
+#tab-panel-container {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+  /* Buttons */
+
+.exit-button {
+  background-color: var(--exitColor);
+  border-width: 0;
+  color: var(--color1);
+  width: 12px;
+  padding: 0;
+  border-top-right-radius: 10px;
+}
+
+.exit-button:hover {
+  background-color: rgb(226,56,78);
+  cursor: pointer;
+}
+
+.tab-label-button, #new-tab-button, .header-button {
+  background-color: var(--color5);
+  color: var(--color1);
+  border-width: 0;
+  height: 18px;
+  font-size: smaller;
+}
+
+.tab-label-button {
+  border-top-left-radius: 10px;
+  width: 45px;
+}
+
+.tab-label-button:hover {
+  cursor: pointer;
+}
+
+.tab-label-button[value="highlighted"] {
+  background-color: var(--color3); 
+}
+
+.header-button {
+  border-radius: 999px;
+}
+
+.header-button:hover {
+  background-color: var(--color3);
+  cursor: pointer;
+}
+
+#new-tab-button {
+  background-color: var(--bkg);
+  border-radius: 999px;
+  width: 20px;
+  padding: 0;
+}
+
+#new-tab-button:hover {
+  background-color: var(--color3);
+  cursor: pointer;
+}
+
+
+/* Setting Tab Components*/
+
+#save-settings {
+  background-color: #4CAF50;
+  border: none;
+  color: var(--color1);
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 250px;
+}
+
+#save-settings:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+#save-settings:active {
+  transform: translateY(1px); /* Button pressed effect */
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: system-ui, sans-serif;
+}
+
+/* Labels */
+.switch label {
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--color3);
+  transition: color 0.25s ease;
+  user-select: none;
+}
+
+.switch label:hover {
+  color: var(--color1);
+}
+
+/* Hide radios */
+.switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Control */
+.switch-control {
+  position: relative;
+}
+
+/* Track */
+.switch-track {
+  width: 44px;
+  height: 24px;
+  background: var(--color5);
+  border-radius: 999px;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+/* Thumb */
+.switch-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--color1);
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+}
+
+/* Checked state (right) */
+.switch input:nth-of-type(2):checked ~ .switch-track .switch-thumb {
+  transform: translateX(20px);
+}
+
+fieldset {
+  border: 0px;
+  border-radius: 10px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  padding-bottom: 18px;
+  margin: 0;
+  min-inline-size: auto;
+}
+
+/* Centered legend */
+legend {
+  margin: 0 auto;
+  padding: 0 0rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color2);
+  text-align: center;
+}
+
+/* Prevent legend from stretching layout */
+legend::after {
+  content: "";
+  display: block;
+  height: 0;
+}
+
+.settings-form {
+    text-align: center;
+}
+
+.multi-toggle {
+  --count: 3; /* number of options */
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--count), 1fr);
+  width: 100%;
+  max-width: 400px;
+  background: var(--color5);
+  border-radius: 999px;
+  padding: 1px;
+  font-family: system-ui, sans-serif;
+  gap: 0;
+}
+
+/* Hide radio inputs */
+.multi-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Labels = segments */
+.multi-toggle label {
+  z-index: 2;
+  text-align: center;
+  padding: 0.5em 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--color2);
+  user-select: none;
+  transition: color 0.25s ease;
+}
+
+/* Track */
+.multi-toggle-track {
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  background: var(--color6);
+  overflow: hidden;
+}
+
+/* Thumb */
+.multi-toggle-thumb {
+  width: calc(100% / var(--count));
+  height: 100%;
+  background: var(--color1);
+  border-radius: 999px;
+  transition: transform 0.25s ease;
+}
+
+/* Active label coloring */
+.multi-toggle input:checked + input ~ .multi-toggle-track + label,
+.multi-toggle input:checked + label {
+  color: var(--bkg);
+}
+/* Thumb moves based on checked input */
+.multi-toggle input:nth-of-type(1):checked ~ .multi-toggle-track .multi-toggle-thumb {
+  transform: translateX(0%);
+}
+.multi-toggle input:nth-of-type(2):checked ~ .multi-toggle-track .multi-toggle-thumb {
+  transform: translateX(100%);
+}
+.multi-toggle input:nth-of-type(3):checked ~ .multi-toggle-track .multi-toggle-thumb {
+  transform: translateX(200%);
+}
+
+/* For more than 3, just extend */
+
+
+
+.multi-checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-family: system-ui, sans-serif;
+}
+
+.multi-checkbox input {
+  display: none; /* hide the actual checkbox */
+}
+
+.multi-checkbox label {
+  display: inline-block;
+  padding: 0.5em 1em;
+  border-radius: 999px;
+  background: var(--color5);
+  color: var(--color2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  text-align: center;
+}
+
+.multi-checkbox input:checked + label {
+  background: var(--color1);
+  color: var(--bkg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.multi-checkbox label:hover {
+  background: var(--color4);
+  color: var(--color1);
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 columns: toggles | multi-checkbox */
+  gap: var(--space-md);
+}
+
+/* Search bar */
+
+#search-bar {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    margin-top: 0px;
+    padding: 10px;
+    color: var(--bkg);
+}
+
+#search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#search-text {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#search-text:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+#search-form button {
+    padding: 10px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #4a90e2;
+    color: var(--bkg);
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#search-form button:hover {
+    background-color: #357abd;
+}
+
+#search-form button:active {
+    transform: scale(0.97);
+}
+
+/* Plus button */
+#append-search {
+    background-color: #6c757d;
+}
+
+#append-search:hover {
+    background-color: #5a6268;
+}
+
+/* Kanji tab*/
+
+.kanji-card {
+  margin-top: 0px;
+  padding: 0px;
+  display: grid;
+  grid-template-columns: 65% 35%;
+}
+
+.kanji-card h1 {
+  margin: 0px;
+  font-size: 58px;
+  text-align: center;
+}
+
+.kanji-card h2 {
+  margin: 0px;
+  text-align: center;
+  color: var(--color3);
+  font-size: small;
+}
+
+.kanji-card span {
+  font-size: larger;
+}
+
+#etymology-text {
+  white-space: pre-wrap;
+  max-width: 400px;
+}
+
+#etymology {
+  margin: 8px;
+}
+
+
+table {
+  border: 2px solid var(--color1);
+  text-align: left; /* default for all cells */
+  width: 100%;
+}
+
+table,
+th,
+td {
+  border: 1px solid var(--color1);
+  border-collapse: collapse;
+}
+
+
+table th:first-child,
+table td:first-child {
+  text-align: center;
+  width: 30%;
+}
+
+a {
+  color: var(--color2);
+}
+
+#welcome {
+  font-size: larger;
+  width: 90%;
+  margin: auto;
+}
