@@ -226,20 +226,7 @@ export class HtmlFactory {
         return res;
     }
 
-    async kanjiTabPanelHtml(kanji) {
-        const kanjiInfo = await chrome.runtime.sendMessage({
-            type: "KANJI_LOOKUP",
-            kanji: kanji
-        });
-
-        const settings = await chrome.runtime.sendMessage({
-            type: "GET_SETTINGS"
-        });
-
-        const radicals = await chrome.runtime.sendMessage({
-            type: "GET_RADICALS",
-            kanji: kanji
-        })
+    kanjiTabPanelHtml({kanji, kanjiInfo, settings, radicals}) {
 
         const isJp = (settings.etymologyLanguage === 'jp');
         const isKatakana = (settings.onyomiKana === 'katakana');
@@ -378,11 +365,7 @@ export class HtmlFactory {
         return res;
     }
 
-    async settingTabPanelHtml() {
-        const settings = await chrome.runtime.sendMessage({
-            type: "GET_SETTINGS"
-        });
-
+    settingTabPanelHtml({settings}) {
         const language = (settings.etymologyLanguage === 'jp');
         const hoverHotkey = ['ctrl', 'alt', 'auto'].indexOf(settings.hoverHotkey);
         const newTabHotkey = (settings.newTabHotkey === 'alt+t');

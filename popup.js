@@ -1,4 +1,6 @@
 import { TabManager, TabFactory } from './tab-objects.js';
+import { lookupKanjiInfo, getSettings, setSettings, saveTabState, setStyling, getRadicals} from './controller.js';
+
 
 const tabs = await chrome.runtime.sendMessage({
     type: "GET_TAB_STATE"
@@ -6,36 +8,18 @@ const tabs = await chrome.runtime.sendMessage({
 let tabManager = await TabManager.create(tabs);
 let tabFactory = new TabFactory();
 
-async function setStyling() {
-    const theme = await chrome.runtime.sendMessage({
-        type: "GET_SETTING",
-        key: "theme"
-    });
-
-    if (theme === "dark") {
-        document.documentElement.style.setProperty('--color1', 'rgb(239,239,239)');
-        document.documentElement.style.setProperty('--color2', 'rgb(170,170,170)');
-        document.documentElement.style.setProperty('--color3', 'rgb(136,136,136)');
-        document.documentElement.style.setProperty('--color4', 'rgb(68,68,68)');
-        document.documentElement.style.setProperty('--color5', 'rgb(51,51,51)');
-        document.documentElement.style.setProperty('--color6', 'rgb(34,34,34)');
-        document.documentElement.style.setProperty('--bkg', 'rgb(24,24,24)');
-    } else {
-        document.documentElement.style.setProperty('--bkg', 'rgb(239,239,239)');
-        document.documentElement.style.setProperty('--color6', 'rgb(255, 255, 255)');
-        document.documentElement.style.setProperty('--color5', 'rgb(170,170,170)');
-        document.documentElement.style.setProperty('--color4', 'rgb(68, 68, 68)');
-        document.documentElement.style.setProperty('--color3', 'rgb(102, 102, 102)');
-        document.documentElement.style.setProperty('--color2', 'rgb(136, 136, 136)');
-        document.documentElement.style.setProperty('--color1', 'rgb(34, 34, 34)');
-    }
-}
-
 /* Tab logic functions */
 
 async function appendKanjiTab(kanji) {
     try {
-        const tab = await tabFactory.createKanjiTab(kanji, tabManager.getLength());
+        const tab = await tabFactory.createKanjiTab({
+            kanji: kanji, 
+            index: tabManager.getLength(),
+            kanjiInfo: await lookupKanjiInfo(kanji),
+            settings: await getSettings(),
+            radicals: await getRadicals()
+
+        });
         tabManager.createNewTab(tab);
         renderTabs();
     } catch {
@@ -49,7 +33,10 @@ function appendHomeTab() {
     renderTabs();
 }
 async function appendSettingTab() {
-    const tab = await tabFactory.createSettingsTab(tabManager.getLength());
+    const tab = await tabFactory.createSettingsTab({
+        index: tabManager.getLength(),
+        settings: await getSettings()
+    });
     tabManager.createNewTab(tab);
     renderTabs();
 }
@@ -62,7 +49,13 @@ function setHomeTab() {
 async function setKanjiTab(kanji) {
     try {
         const currentTabIndex = tabManager.getCurrentTabIndex();
-        const tab = await tabFactory.createKanjiTab(kanji, currentTabIndex);
+        const tab = await tabFactory.createKanjiTab({
+            kanji: kanji,
+            index: currentTabIndex,
+            kanjiInfo: await lookupKanjiInfo(kanji),
+            settings: await getSettings(),
+            radicals: await getRadicals()
+        });
         tabManager.changeCurrentTab(tab);
         renderTabs();
     } catch {
@@ -102,9 +95,9 @@ async function appendSearch() {
     await appendKanjiTab(searchValue);
 }
 
-/* Chrome storage functions */
 
-async function submitSettings(event) {
+
+export async function submitSettings(event) {
     event.preventDefault();
     const form = event.target;
 
@@ -127,13 +120,7 @@ async function submitSettings(event) {
         settings
     });
 }
-async function saveTabState() {
-    var tabState = tabManager.toJson();
-    await chrome.runtime.sendMessage({
-        type: "SET_TAB_STATE",
-        tabState
-    })
-}
+
 
 /* Render */
 
@@ -181,7 +168,7 @@ function renderTabs() {
         const appendSearchBtn = document.getElementById("append-search");
         appendSearchBtn.addEventListener("click", appendSearch);
     }
-    saveTabState();
+    saveTabState(tabManager.toJson());
 }
 
 /* Constant top-page buttons */

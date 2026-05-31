@@ -1,4 +1,6 @@
 import { HtmlFactory } from './html-factory.js'
+import { getSettings, lookupKanjiInfo, getRadicals } from './controller.js'
+
 
 const htmlFactory = new HtmlFactory();
 
@@ -64,14 +66,19 @@ class Tab {
 }
 
 export class TabFactory {
-    async createKanjiTab(kanji, index) {
-        const html = await htmlFactory.kanjiTabPanelHtml(kanji);
+    createKanjiTab({kanji, index, kanjiInfo, settings, radicals}) {
+        const html = htmlFactory.kanjiTabPanelHtml({
+            kanji: kanji,
+            kanjiInfo: kanjiInfo,
+            settings: settings,
+            radicals: radicals
+        });
         const tabPanel = new TabPanel(html);
         return new Tab(kanji, index, tabPanel);
     }
 
-    async createSettingsTab(index) {
-        const html = await htmlFactory.settingTabPanelHtml();
+    async createSettingsTab({index, settings}) {
+        const html = htmlFactory.settingTabPanelHtml({settings: settings});
         const tabPanel = new TabPanel(html);
         return new Tab('S', index, tabPanel);
     }
@@ -98,9 +105,18 @@ export class TabManager {
                     return tabFactory.createHomeTab(i);
                 }
                 if (tabName === 'S') {
-                    return await tabFactory.createSettingsTab(i);
+                    return await tabFactory.createSettingsTab({
+                        index: i,
+                        settings: await getSettings()
+                    });
                 }
-                    return await tabFactory.createKanjiTab(tabName, i);
+                    return await tabFactory.createKanjiTab({
+                        kanji: tabName,
+                        index: i,
+                        kanjiInfo: await lookupKanjiInfo(tabName),
+                        settings: await getSettings(),
+                        radicals: await getRadicals(tabName)
+                    });
             })
         );
         return new TabManager(tabs, tabManagerJson.index);
