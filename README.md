@@ -25,3 +25,8 @@ A chrome extension made for Japanese language learners learning kanji.
 4. Click **Load unpacked** on the top left
 6. Navigate to and select the cloned ```Kanji-Etymology-Dictionary``` project folder
 7. (Optional) Pin the extension to the Chrome toolbar for easier access.
+
+## Features to add
+* Lookup by radical
+* Semantic meaning section
+* Phonetic series tab
